@@ -9,7 +9,6 @@ class Game {
   constructor(height, width) {
     this.height = height;
     this.width = width;
-    this.board = [];
     this.currPlayer = 1;
 
     this.makeBoard();
@@ -21,7 +20,7 @@ class Game {
   */
 
   makeBoard() {
-    //TODO: move line 12 to this one; streamline
+    this.board = [];
     for (let y = 0; y < this.height; y++) {
       this.board.push(Array.from({ length: this.width }));
     }
@@ -123,23 +122,25 @@ class Game {
     this.currPlayer = this.currPlayer === 1 ? 2 : 1;
   }
 
-  _win(cells) {
-    // Check four cells to see if they're all color of current player
-    //  - cells: list of four (y, x) cells
-    //  - returns true if all are legal coordinates & all match currPlayer
-
-    return cells.every(
-      ([y, x]) =>
-        y >= 0 &&
-        y < this.height &&
-        x >= 0 &&
-        x < this.width &&
-        this.board[y][x] === this.currPlayer
-    );
-  }
   /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
   checkForWin() {
+
+    function _win(cells) {
+      // Check four cells to see if they're all color of current player
+      //  - cells: list of four (y, x) cells
+      //  - returns true if all are legal coordinates & all match currPlayer
+
+      return cells.every(
+        ([y, x]) =>
+          y >= 0 &&
+          y < this.height &&
+          x >= 0 &&
+          x < this.width &&
+          this.board[y][x] === this.currPlayer
+      );
+    }
+
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         // get "check list" of 4 cells (starting here) for each of the different
@@ -149,8 +150,10 @@ class Game {
         const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
         const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
+        // Bind _win to this context.
+        let _winBound = _win.bind(this);
         // find winner (only checking each win-possibility as needed)
-        if (this._win(horiz) || this._win(vert) || this._win(diagDR) || this._win(diagDL)) {
+        if (_winBound(horiz) || _winBound(vert) || _winBound(diagDR) || _winBound(diagDL)) {
           return true;
         }
       }
