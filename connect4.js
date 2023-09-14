@@ -21,6 +21,7 @@ class Game {
   */
 
   makeBoard() {
+    //TODO: move line 12 to this one; streamline
     for (let y = 0; y < this.height; y++) {
       this.board.push(Array.from({ length: this.width }));
     }
@@ -31,7 +32,8 @@ class Game {
   makeHtmlBoard() {
     const boardElement = document.getElementById('board');
     // clear gameboard before creating new one
-    //MDN ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
+    // MDN ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
+    // could also use innerHTML, maybe preferable
     boardElement.textContent = '';
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
