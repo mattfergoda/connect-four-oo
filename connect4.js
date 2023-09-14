@@ -30,7 +30,9 @@ class Game {
 
   makeHtmlBoard() {
     const boardElement = document.getElementById('board');
-
+    // clear gameboard before creating new one
+    //MDN ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
+    boardElement.textContent = '';
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
@@ -38,7 +40,7 @@ class Game {
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
       headCell.setAttribute('id', x);
-      headCell.addEventListener('click', this.handleClick);
+      headCell.addEventListener('click', this.handleClick.bind(this));
       top.append(headCell);
     }
 
@@ -47,11 +49,12 @@ class Game {
     // make main part of board
     for (let y = 0; y < this.height; y++) {
       const row = document.createElement('tr');
-
+      console.log('outer loop y=',y);
       for (let x = 0; x < this.width; x++) {
         const cell = document.createElement('td');
         cell.setAttribute('id', `c-${y}-${x}`);
         row.append(cell);
+        console.log('inner loop x=', x, 'inner loop y=', y);
       }
 
       boardElement.append(row);
@@ -92,7 +95,7 @@ class Game {
 
   handleClick(evt) {
     // get x from ID of clicked cell
-    const x = Number(evt.target.id);
+    const x = +evt.target.id;
 
     // get next spot in column (if none, ignore click)
     const y = this.findSpotForCol(x);
