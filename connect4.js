@@ -50,12 +50,12 @@ class Game {
     // make main part of board
     for (let y = 0; y < this.height; y++) {
       const row = document.createElement('tr');
-      console.log('outer loop y=',y);
+
       for (let x = 0; x < this.width; x++) {
         const cell = document.createElement('td');
         cell.setAttribute('id', `c-${y}-${x}`);
         row.append(cell);
-        console.log('inner loop x=', x, 'inner loop y=', y);
+
       }
 
       boardElement.append(row);
@@ -87,7 +87,7 @@ class Game {
     spot.append(piece);
   }
 
-  /** endGame: announce game end */
+  /** endGame: announce game end, remove eventlisteners from top row to lock board */
 
   endGame(msg) {
     alert(msg);
@@ -166,4 +166,15 @@ class Game {
 
 }
 
-new Game(6, 7);
+/** function to create new board and start game */
+function startGame() {
+  return new Game(6,7);
+}
+
+/** add eventlistener to start button */
+function addListenerToStart() {
+  const startButton = document.getElementById('start-button');
+  startButton.addEventListener('click', startGame);
+}
+
+addListenerToStart();
