@@ -10,6 +10,7 @@ class Game {
     this.height = height;
     this.width = width;
     this.currPlayer = 1;
+    this.gameOver = false;
 
     this.makeBoard();
     this.makeHtmlBoard();
@@ -90,11 +91,15 @@ class Game {
   /** endGame: announce game end, remove eventlisteners from top row to lock board */
 
   endGame(msg) {
+    this.gameOver = true;
     alert(msg);
   }
   /** handleClick: handle click of column top to play piece */
 
   handleClick(evt) {
+    // If the game is over, do nothing.
+    if (this.gameOver) return;
+
     // get x from ID of clicked cell
     const x = +evt.target.id;
 
